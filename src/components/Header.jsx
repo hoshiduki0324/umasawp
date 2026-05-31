@@ -105,32 +105,6 @@ export default function Header({
           </div>
         )}
 
-        {/* 登録ステータスバッジ */}
-        {goodsKey !== "all" && (
-          <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-            {[
-              { type: "wishes", entry: myWishEntry, label: "🥕 欲しい" },
-              { type: "haves",  entry: myHaveEntry, label: "💎 所持" },
-            ].map(({ type, entry, label }) => (
-              <div key={type} style={{
-                flex: 1,
-                background: entry ? "rgba(0,119,51,0.15)" : "rgba(255,255,255,0.1)",
-                border: `1px solid ${entry ? "rgba(0,119,51,0.4)" : "rgba(255,255,255,0.2)"}`,
-                borderRadius: 10, padding: "6px 10px",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-              }}>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: entry ? "#4caf82" : "rgba(255,255,255,0.6)" }}>{label}</div>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 1 }}>
-                    {entry ? `${Object.keys(entry.items || {}).length}種類` : "未登録"}
-                  </div>
-                </div>
-                <div style={{ fontSize: 14 }}>{entry ? "✅" : "➕"}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
         {/* グッズ選択ドロップダウン */}
         <div style={{ position: "relative" }}>
           <select
