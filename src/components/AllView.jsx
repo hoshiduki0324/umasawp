@@ -1,12 +1,11 @@
 // 全体タブ
-// 全グッズの登録状況をユーザー別にまとめて表示する（閲覧専用）
 import { useState } from "react";
 import { GOODS_LIST } from "../constants";
 
 export default function AllView({ allData, authUser, onViewUser }) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch]           = useState("");
+  const [sortByCount, setSortByCount] = useState(false);
 
-  // 全ユーザーのデータをユーザー別にまとめる
   const allViewByUser = (() => {
     const userMap = {};
     GOODS_LIST.forEach((g) => {
@@ -29,6 +28,9 @@ export default function AllView({ allData, authUser, onViewUser }) {
       .sort((a, b) => a.name.localeCompare(b.name, "ja"));
   })();
 
+  const sortItems = (items) =>
+    sortByCount ? [...items].sort((a, b) => b.cnt - a.cnt) : items;
+
   const chipStyle = {
     background: "#f0f0f0", border: "1px solid #ddd", borderRadius: 10,
     padding: "4px 10px", display: "flex", alignItems: "center", gap: 6,
@@ -36,18 +38,20 @@ export default function AllView({ allData, authUser, onViewUser }) {
 
   return (
     <div>
-      {/* 名前検索 */}
-      <input
-        style={{
-          width: "100%", background: "#f8f8f8", border: "1px solid #e0e0e0",
-          borderRadius: 12, padding: "12px 16px", color: "#111",
-          fontSize: 15, outline: "none", fontFamily: "inherit", marginBottom: 14,
-          boxSizing: "border-box",
-        }}
-        placeholder="名前で検索…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        <input
+          style={{ flex: 1, background: "#f8f8f8", border: "1px solid #e0e0e0", borderRadius: 12, padding: "12px 16px", color: "#111", fontSize: 15, outline: "none", fontFamily: "inherit", minHeight: 48 }}
+          placeholder="名前で検索…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button
+          style={{ background: sortByCount ? "#111" : "#f0f0f0", color: sortByCount ? "#fff" : "#111", border: "1px solid #e0e0e0", borderRadius: 12, padding: "0 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", flexShrink: 0, minHeight: 48 }}
+          onClick={() => setSortByCount((v) => !v)}
+        >
+          {sortByCount ? "個数順" : "登録順"}
+        </button>
+      </div>
 
       {allViewByUser.length === 0 && (
         <div style={{ textAlign: "center", color: "#888", padding: "48px 24px", fontSize: 14 }}>
@@ -55,10 +59,8 @@ export default function AllView({ allData, authUser, onViewUser }) {
         </div>
       )}
 
-      {/* ユーザー別カード */}
       {allViewByUser.map((u) => (
         <div key={u.name} style={{ background: "#f8f8f8", border: "1px solid #e0e0e0", borderRadius: 16, padding: "16px", marginBottom: 12 }}>
-          {/* ユーザー名（自分以外はタップでマイページ表示） */}
           <div style={{ fontSize: 17, fontWeight: 900, marginBottom: 10, color: "#111", display: "flex", alignItems: "center", gap: 8 }}>
             <span
               style={{ cursor: u.uid === authUser?.uid ? "default" : "pointer", textDecoration: u.uid === authUser?.uid ? "none" : "underline", textDecorationColor: "#ccc" }}
@@ -71,7 +73,6 @@ export default function AllView({ allData, authUser, onViewUser }) {
             )}
           </div>
 
-          {/* 欲しい・所持をグッズ別に表示 */}
           {["wishes", "haves"].map((type) => {
             const goodsList = GOODS_LIST.filter((g) => u[type][g.key] && u[type][g.key].length > 0);
             if (goodsList.length === 0) return null;
@@ -86,10 +87,10 @@ export default function AllView({ allData, authUser, onViewUser }) {
                       {g.label}
                     </div>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                      {u[type][g.key].map(({ item, cnt }) => (
+                      {sortItems(u[type][g.key]).map(({ item, cnt }) => (
                         <div key={item} style={chipStyle}>
-                          <span style={{ fontSize: 12 }}>{item}</span>
-                          <span style={{ fontSize: 12, fontWeight: 700 }}>{cnt}個</span>
+                          <span style={{ fontSize: 12, color: "#111" }}>{item}</span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: "#111" }}>{cnt}個</span>
                         </div>
                       ))}
                     </div>
