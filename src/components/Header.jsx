@@ -26,19 +26,19 @@ export default function Header({
   const myHaveEntry = getEntry("haves");
 
   return (
-    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#111", padding: "12px 16px" }}>
+    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "var(--header-bg)", padding: "12px 16px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
 
         {/* 上段: ロゴ・ユーザー情報 */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           {/* ロゴ */}
           <div>
-            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#aaa", marginBottom: 4, textTransform: "uppercase" }}>
+            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "var(--header-fg)", opacity: 0.6, marginBottom: 4, textTransform: "uppercase" }}>
               7TH EVENT THE STAGE
             </div>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 900, lineHeight: 1, display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ color: "#fff" }}>Uma</span>
-              <span style={{ color: "#ddd" }}>Swap</span>
+              <span style={{ color: "var(--header-fg)" }}>Uma</span>
+              <span style={{ color: "var(--header-fg)", opacity: 0.8 }}>Swap</span>
               <span style={{ fontSize: 18 }}>✨</span>
             </h1>
           </div>
@@ -60,13 +60,13 @@ export default function Header({
               )}
 
               {/* 表示名 */}
-              <div style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 8, padding: "4px 10px", fontSize: 12, color: "#fff", maxWidth: 80, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div style={{ background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", borderRadius: 8, padding: "4px 10px", fontSize: 12, color: "var(--header-fg)", maxWidth: 80, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {myProfile?.displayName || "設定中"}
               </div>
 
               {/* 名前変更ボタン */}
               <button
-                style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "4px 8px", fontSize: 11, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}
+                style={{ background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", color: "var(--header-fg)", borderRadius: 8, padding: "4px 8px", fontSize: 11, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}
                 onClick={() => { setEditNameVal(myProfile?.displayName || ""); setEditingName(true); }}
               >
                 名前変更
@@ -74,7 +74,7 @@ export default function Header({
 
               {/* マイページボタン */}
               <button
-                style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", color: "#fff", borderRadius: 8, padding: "4px 8px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}
+                style={{ background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", color: "var(--header-fg)", borderRadius: 8, padding: "4px 8px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}
                 onClick={onOpenMyPage}
               >
                 マイページ
@@ -84,14 +84,14 @@ export default function Header({
             {/* ダークモード切り替え + ログアウト */}
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
               <button
-                style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 6, padding: "3px 8px", fontSize: 14, cursor: "pointer", fontFamily: "inherit", lineHeight: 1 }}
+                style={{ background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", color: "var(--header-fg)", borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", lineHeight: 1 }}
                 onClick={onToggleDark}
                 title={darkMode ? "ライトモードに切り替え" : "ダークモードに切り替え"}
               >
-                {darkMode ? "☀️" : "🌙"}
+                {darkMode ? "ライト" : "ダーク"}
               </button>
               <button
-                style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)", borderRadius: 6, padding: "3px 10px", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}
+                style={{ background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", color: "var(--header-fg)", opacity: 0.7, borderRadius: 6, padding: "3px 10px", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}
                 onClick={signOutUser}
               >
                 ログアウト
@@ -104,30 +104,30 @@ export default function Header({
         {editingName && (
           <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
             <input
-              style={{ flex: 1, background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 10, padding: "8px 12px", color: "#fff", fontSize: 14, outline: "none", fontFamily: "inherit" }}
+              style={{ flex: 1, background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", borderRadius: 10, padding: "8px 12px", color: "var(--header-fg)", fontSize: 14, outline: "none", fontFamily: "inherit" }}
               value={editNameVal}
               onChange={(e) => setEditNameVal(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") saveName(); if (e.key === "Escape") setEditingName(false); }}
               autoFocus
             />
-            <button style={{ background: "#fff", border: "none", color: "#111", borderRadius: 8, padding: "8px 12px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 }} onClick={saveName}>保存</button>
-            <button style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "8px 10px", fontSize: 13, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 }} onClick={() => setEditingName(false)}>×</button>
+            <button style={{ background: "var(--header-fg)", border: "none", color: "var(--header-bg)", borderRadius: 8, padding: "8px 12px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 }} onClick={saveName}>保存</button>
+            <button style={{ background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", color: "var(--header-fg)", borderRadius: 8, padding: "8px 10px", fontSize: 13, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 }} onClick={() => setEditingName(false)}>×</button>
           </div>
         )}
 
         {/* グッズ選択ドロップダウン */}
         <div style={{ position: "relative" }}>
           <select
-            style={{ width: "100%", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 10, padding: "10px 36px 10px 14px", color: "#fff", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: "pointer", outline: "none", appearance: "none" }}
+            style={{ width: "100%", background: "var(--header-btn-bg)", border: "1px solid var(--header-btn-border)", borderRadius: 10, padding: "10px 36px 10px 14px", color: "var(--header-fg)", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: "pointer", outline: "none", appearance: "none" }}
             value={goodsKey}
             onChange={(e) => onSwitchGoods(e.target.value)}
           >
-            <option value="all" style={{ background: "#111", color: "#fff" }}>全体</option>
+            <option value="all" style={{ background: "var(--header-bg)", color: "var(--header-fg)" }}>全体</option>
             {GOODS_LIST.map((g) => (
-              <option key={g.key} value={g.key} style={{ background: "#111", color: "#fff" }}>{g.label}</option>
+              <option key={g.key} value={g.key} style={{ background: "var(--header-bg)", color: "var(--header-fg)" }}>{g.label}</option>
             ))}
           </select>
-          <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "#fff", fontSize: 11, pointerEvents: "none" }}>▼</span>
+          <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "var(--header-fg)", fontSize: 11, pointerEvents: "none" }}>▼</span>
         </div>
       </div>
     </header>

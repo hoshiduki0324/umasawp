@@ -7,17 +7,17 @@ export default function ConfirmModal({ message, onOk, onCancel }) {
       display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
     }}>
       <div style={{
-        background: "#fff", border: "1px solid #e0e0e0", borderRadius: 20,
+        background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 20,
         padding: "28px 24px", maxWidth: 320, width: "100%",
       }}>
-        <div style={{ fontSize: 16, lineHeight: 1.7, marginBottom: 24, color: "#111" }}>
+        <div style={{ fontSize: 16, lineHeight: 1.7, marginBottom: 24, color: "var(--text)" }}>
           {message}
         </div>
         <div style={{ display: "flex", gap: 12 }}>
           <button
             style={{
-              flex: 1, background: "#f0f0f0", border: "1px solid #e0e0e0",
-              color: "#666", borderRadius: 12, padding: "12px 0",
+              flex: 1, background: "var(--bg3)", border: "1px solid var(--border)",
+              color: "var(--text4)", borderRadius: 12, padding: "12px 0",
               fontSize: 15, cursor: "pointer", fontFamily: "inherit",
             }}
             onClick={onCancel}

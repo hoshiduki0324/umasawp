@@ -16,7 +16,11 @@ import ItemStats     from "./components/ItemStats";
 import AdminPanel    from "./components/AdminPanel";
 
 export default function App() {
-  const [darkMode,      setDarkMode]      = useState(() => localStorage.getItem("darkMode") === "true");
+  const [darkMode,      setDarkMode]      = useState(() => {
+    const saved = localStorage.getItem("darkMode") === "true";
+    if (saved) document.documentElement.classList.add("dark");
+    return saved;
+  });
   const [authUser,      setAuthUser]      = useState(undefined);
   const [myProfile,     setMyProfile]     = useState(null);
   const [showNameSetup, setShowNameSetup] = useState(false);

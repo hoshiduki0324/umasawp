@@ -44,8 +44,8 @@ export default function ItemStats({ allChars, wishEntries, haveEntries, group, h
       {/* 絞り込み検索 */}
       <input
         style={{
-          width: "100%", background: "#f8f8f8", border: "1px solid #e0e0e0",
-          borderRadius: 12, padding: "12px 16px", color: "#111",
+          width: "100%", background: "var(--bg2)", border: "1px solid var(--border)",
+          borderRadius: 12, padding: "12px 16px", color: "var(--text)",
           fontSize: 15, outline: "none", fontFamily: "inherit",
           marginBottom: 14, boxSizing: "border-box",
         }}
@@ -55,24 +55,24 @@ export default function ItemStats({ allChars, wishEntries, haveEntries, group, h
       />
 
       {allKeys.length === 0 && (
-        <div style={{ textAlign: "center", color: "#888", padding: "48px 24px", fontSize: 14 }}>
+        <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "48px 24px", fontSize: 14 }}>
           まだ誰も登録していません
         </div>
       )}
 
       {/* アイテム別カード */}
       {allKeys.map((ch) => (
-        <div key={ch} style={{ background: "#f8f8f8", border: "1px solid #e0e0e0", borderRadius: 16, padding: "16px", marginBottom: 12 }}>
-          <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>{ch}</div>
+        <div key={ch} style={{ background: "var(--bg2)", border: "1px solid var(--border)", borderRadius: 16, padding: "16px", marginBottom: 12 }}>
+          <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10, color: "var(--text)" }}>{ch}</div>
 
           {/* 欲しい人一覧 */}
           {wStats[ch] && (
             <div style={{ marginBottom: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#111", marginBottom: 6 }}>🥕 欲しい</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", marginBottom: 6 }}>🥕 欲しい</div>
               {wStats[ch].map((u, i) => (
-                <div key={i} style={rowStyle("#f0f0f0")}>
-                  <span style={{ fontSize: 14 }}>{u.name}</span>
-                  <span style={{ fontSize: 14, fontWeight: 700 }}>{u.count}個</span>
+                <div key={i} style={rowStyle("var(--bg3)")}>
+                  <span style={{ fontSize: 14, color: "var(--text)" }}>{u.name}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{u.count}個</span>
                 </div>
               ))}
             </div>
@@ -81,11 +81,11 @@ export default function ItemStats({ allChars, wishEntries, haveEntries, group, h
           {/* 所持している人一覧 */}
           {hStats[ch] && (
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#555", marginBottom: 6 }}>💎 所持</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", marginBottom: 6 }}>💎 所持</div>
               {hStats[ch].map((u, i) => (
-                <div key={i} style={rowStyle("#e8e8e8")}>
-                  <span style={{ fontSize: 14 }}>{u.name}</span>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: "#555" }}>{u.count}個</span>
+                <div key={i} style={rowStyle("var(--chip-sel)")}>
+                  <span style={{ fontSize: 14, color: "var(--text)" }}>{u.name}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text3)" }}>{u.count}個</span>
                 </div>
               ))}
             </div>
