@@ -121,7 +121,7 @@ export default function App() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#fff", color: "#111", fontFamily: "'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#fff", color: "#111", fontFamily: "'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif", paddingTop: 136 }}>
 
       {confirm && <ConfirmModal message={confirm.message} onOk={() => { confirm.onOk(); hideConfirm(); }} onCancel={hideConfirm} />}
 
@@ -152,6 +152,12 @@ export default function App() {
               }}
             >
               設定する
+            </button>
+            <button
+              style={{ width: "100%", background: "transparent", border: "none", color: "#aaa", borderRadius: 12, padding: "12px 0", fontSize: 14, cursor: "pointer", fontFamily: "inherit", marginTop: 8 }}
+              onClick={() => setShowNameSetup(false)}
+            >
+              スキップ
             </button>
           </div>
         </div>

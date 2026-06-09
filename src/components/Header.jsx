@@ -25,7 +25,7 @@ export default function Header({
   const myHaveEntry = getEntry("haves");
 
   return (
-    <header style={{ position: "relative", zIndex: 1, background: "#111", padding: "12px 16px" }}>
+    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#111", padding: "12px 16px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
 
         {/* 上段: ロゴ・ユーザー情報 */}

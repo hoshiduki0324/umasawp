@@ -1,5 +1,7 @@
 // 欲しい・所持タブの共通コンポーネント
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const PAGE_SIZE = 10;
 import { dbSet, dbRemove } from "../firebase";
 
 export default function WishHaveList({
@@ -14,6 +16,9 @@ export default function WishHaveList({
   const [formSel, setFormSel]         = useState({});
   const [charSearch, setCharSearch]   = useState("");
   const [sortByCount, setSortByCount] = useState(false);
+  const [page, setPage]               = useState(0);
+
+  useEffect(() => { setPage(0); }, [search, group]);
 
   const isWish  = mode === "wish";
   const type    = isWish ? "wishes" : "haves";
@@ -188,7 +193,7 @@ export default function WishHaveList({
           {allChars.length === 0 && <div style={{ textAlign: "left", color: "#888", padding: "48px 0", fontSize: 14 }}>⚙ 管理タブでアイテムを先に登録してください</div>}
           {allChars.length > 0 && filtered.length === 0 && <div style={{ textAlign: "left", color: "#888", padding: "48px 0", fontSize: 14 }}>まだ誰も登録していません</div>}
 
-          {filtered.map((entry) => {
+          {filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((entry) => {
             const isMe = entry.uid === authUser?.uid;
             const visible = hasGroups && group !== "全体"
               ? Object.entries(entry.items || {})
@@ -223,6 +228,22 @@ export default function WishHaveList({
               </div>
             );
           })}
+
+          {filtered.length > PAGE_SIZE && (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, padding: "12px 0 4px" }}>
+              <button
+                style={{ background: page === 0 ? "#f0f0f0" : "#111", color: page === 0 ? "#aaa" : "#fff", border: "none", borderRadius: 10, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: page === 0 ? "default" : "pointer", fontFamily: "inherit" }}
+                onClick={() => setPage((p) => p - 1)} disabled={page === 0}
+              >前へ</button>
+              <span style={{ fontSize: 13, color: "#888", minWidth: 60, textAlign: "center" }}>
+                {page + 1} / {Math.ceil(filtered.length / PAGE_SIZE)}
+              </span>
+              <button
+                style={{ background: page === Math.ceil(filtered.length / PAGE_SIZE) - 1 ? "#f0f0f0" : "#111", color: page === Math.ceil(filtered.length / PAGE_SIZE) - 1 ? "#aaa" : "#fff", border: "none", borderRadius: 10, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: page === Math.ceil(filtered.length / PAGE_SIZE) - 1 ? "default" : "pointer", fontFamily: "inherit" }}
+                onClick={() => setPage((p) => p + 1)} disabled={page === Math.ceil(filtered.length / PAGE_SIZE) - 1}
+              >次へ</button>
+            </div>
+          )}
         </>
       )}
     </div>
