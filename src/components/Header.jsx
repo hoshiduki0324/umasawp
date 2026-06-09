@@ -6,6 +6,7 @@ import { dbSet, signOutUser } from "../firebase";
 export default function Header({
   authUser, myProfile, allData, goodsKey,
   notifs, onSwitchGoods, onOpenMyPage, onToggleNotifs,
+  darkMode, onToggleDark,
 }) {
   const [editingName, setEditingName] = useState(false);
   const [editNameVal, setEditNameVal] = useState("");
@@ -80,13 +81,22 @@ export default function Header({
               </button>
             </div>
 
-            {/* ログアウト */}
-            <button
-              style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)", borderRadius: 6, padding: "3px 10px", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}
-              onClick={signOutUser}
-            >
-              ログアウト
-            </button>
+            {/* ダークモード切り替え + ログアウト */}
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <button
+                style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 6, padding: "3px 8px", fontSize: 14, cursor: "pointer", fontFamily: "inherit", lineHeight: 1 }}
+                onClick={onToggleDark}
+                title={darkMode ? "ライトモードに切り替え" : "ダークモードに切り替え"}
+              >
+                {darkMode ? "☀️" : "🌙"}
+              </button>
+              <button
+                style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)", borderRadius: 6, padding: "3px 10px", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}
+                onClick={signOutUser}
+              >
+                ログアウト
+              </button>
+            </div>
           </div>
         </div>
 

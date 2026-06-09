@@ -1,6 +1,6 @@
 // メインアプリコンポーネント
 // 認証・データ取得・状態管理を担当し、各コンポーネントを組み合わせる
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./index.css";
 import { GOODS_LIST, GROUPS, ADMIN_UID } from "./constants";
 import { dbSet, onValue, dbRef, signInWithGoogle, onAuthChange } from "./firebase";
@@ -16,6 +16,7 @@ import ItemStats     from "./components/ItemStats";
 import AdminPanel    from "./components/AdminPanel";
 
 export default function App() {
+  const [darkMode,      setDarkMode]      = useState(() => localStorage.getItem("darkMode") === "true");
   const [authUser,      setAuthUser]      = useState(undefined);
   const [myProfile,     setMyProfile]     = useState(null);
   const [showNameSetup, setShowNameSetup] = useState(false);
@@ -35,6 +36,16 @@ export default function App() {
   const showToast   = (msg)      => { setToast(msg); setTimeout(() => setToast(""), 2500); };
   const showConfirm = (msg, onOk) => setConfirm({ message: msg, onOk });
   const hideConfirm = ()          => setConfirm(null);
+
+  const toggleDark = useCallback(() => {
+    setDarkMode((v) => {
+      const next = !v;
+      if (next) document.documentElement.classList.add("dark");
+      else      document.documentElement.classList.remove("dark");
+      localStorage.setItem("darkMode", next);
+      return next;
+    });
+  }, []);
 
   // 認証の監視
   useEffect(() => {
@@ -121,19 +132,19 @@ export default function App() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#fff", color: "#111", fontFamily: "'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif", paddingTop: 136 }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)", fontFamily: "'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif", paddingTop: 136 }}>
 
       {confirm && <ConfirmModal message={confirm.message} onOk={() => { confirm.onOk(); hideConfirm(); }} onCancel={hideConfirm} />}
 
       {/* 名前設定モーダル */}
       {showNameSetup && (
         <div style={{ position: "fixed", inset: 0, background: "#00000099", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-          <div style={{ background: "#fff", border: "1px solid #e0e0e0", borderRadius: 20, padding: "32px 24px", maxWidth: 360, width: "100%" }}>
+          <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 20, padding: "32px 24px", maxWidth: 360, width: "100%" }}>
             <div style={{ fontSize: 24, marginBottom: 4 }}>👋</div>
             <div style={{ fontSize: 20, fontWeight: 900, marginBottom: 8 }}>はじめまして！</div>
-            <div style={{ fontSize: 14, color: "#888", marginBottom: 20 }}>XのIDまたは名前を入力してください</div>
+            <div style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 20 }}>XのIDまたは名前を入力してください</div>
             <input
-              style={{ width: "100%", background: "#f5f5f5", border: "1px solid #e0e0e0", borderRadius: 12, padding: "12px 16px", fontSize: 15, outline: "none", fontFamily: "inherit", boxSizing: "border-box", color: "#111" }}
+              style={{ width: "100%", background: "var(--bg5)", border: "1px solid var(--border)", borderRadius: 12, padding: "12px 16px", fontSize: 15, outline: "none", fontFamily: "inherit", boxSizing: "border-box", color: "var(--text)" }}
               placeholder="例: @hoshitsuki"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
@@ -173,11 +184,12 @@ export default function App() {
         onSwitchGoods={switchGoods}
         onOpenMyPage={() => setShowMyPage(true)}
         onToggleNotifs={() => setShowNotifs((v) => !v)}
+        darkMode={darkMode} onToggleDark={toggleDark}
       />
 
       {/* タブ */}
       {goodsKey !== "all" && (
-        <nav style={{ display: "flex", maxWidth: 600, margin: "0 auto", borderBottom: "1px solid #e0e0e0", background: "#fff" }}>
+        <nav style={{ display: "flex", maxWidth: 600, margin: "0 auto", borderBottom: "1px solid var(--border)", background: "var(--bg)" }}>
           {[
             ["list", "🥕 欲しい"],
             ["have", "💎 所持"],
@@ -185,7 +197,7 @@ export default function App() {
             ...(authUser?.uid === ADMIN_UID ? [["admin", "⚙ 管理"]] : []),
           ].map(([key, label]) => (
             <button key={key}
-              style={{ flex: 1, padding: "12px 0", border: "none", background: "none", color: tab === key ? "#111" : "#888", fontSize: 12, fontWeight: tab === key ? 700 : 600, cursor: "pointer", borderBottom: `2px solid ${tab === key ? "#111" : "transparent"}`, transition: "all .2s", fontFamily: "inherit" }}
+              style={{ flex: 1, padding: "12px 0", border: "none", background: "none", color: tab === key ? "var(--text)" : "var(--text-muted)", fontSize: 12, fontWeight: tab === key ? 700 : 600, cursor: "pointer", borderBottom: `2px solid ${tab === key ? "var(--text)" : "transparent"}`, transition: "all .2s", fontFamily: "inherit" }}
               onClick={() => setTab(key)}>
               {label}
             </button>
@@ -195,10 +207,10 @@ export default function App() {
 
       {/* グループタブ */}
       {goodsKey !== "all" && hasGroups && (tab === "list" || tab === "have" || tab === "char") && (
-        <div style={{ display: "flex", maxWidth: 600, margin: "0 auto", borderBottom: "1px solid #e0e0e0", background: "#f9f9f9" }}>
+        <div style={{ display: "flex", maxWidth: 600, margin: "0 auto", borderBottom: "1px solid var(--border)", background: "var(--bg4)" }}>
           {GROUPS.map((g) => (
             <button key={g}
-              style={{ flex: 1, padding: "10px 0", border: "none", background: "none", color: group === g ? "#111" : "#888", fontSize: 12, fontWeight: group === g ? 700 : 600, cursor: "pointer", borderBottom: `2px solid ${group === g ? "#111" : "transparent"}`, transition: "all .2s", fontFamily: "inherit" }}
+              style={{ flex: 1, padding: "10px 0", border: "none", background: "none", color: group === g ? "var(--text)" : "var(--text-muted)", fontSize: 12, fontWeight: group === g ? 700 : 600, cursor: "pointer", borderBottom: `2px solid ${group === g ? "var(--text)" : "transparent"}`, transition: "all .2s", fontFamily: "inherit" }}
               onClick={() => setGroup(g)}>
               {g === "全体" ? "全体" : `${g}グループ`}
             </button>
